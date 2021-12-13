@@ -22,6 +22,14 @@
 #define YELLOW  RGB4(4,4,0)
 #define WHITE   RGB4(4,4,4)
 
+//74HC165のピンの設定
+#define SL    12//SH/LD
+#define CLKB  11//CLK
+#define SER   13//QH
+
+//ボタンが点灯しているかどうか
+#define bPressed(i) !bitRead(buttonData,i)
+
 //フレーム
 int16_t frame = 0;
 #define FPS 12
@@ -65,7 +73,7 @@ void drawMisakiHankaku ( int16_t x,int16_t y,char * text,uint16_t color )  {
  }
  
  //全角文字のスクロール(変数frameに応じてスクロール)
- void scrollMisakiZenkaku ( int16_t x,int16_t y,int16_t w,char * text,uint16_t color ){
+ void scrollMisakiZenkaku ( int16_t x,int16_t y,int16_t w,char * text,uint16_t color,uint16_t BGColor = BLACK ){
   n=0;
 
   while(*text)
@@ -73,7 +81,6 @@ void drawMisakiHankaku ( int16_t x,int16_t y,char * text,uint16_t color )  {
 
   int16_t loop = frame % (8 * (n + 2));
 
-  matrix.fillRect(x,y,w,7,BLACK);
 
   for (byte i=0; i < 8; i++) {
     for (byte j=0; j < n; j++){
@@ -85,7 +92,7 @@ void drawMisakiHankaku ( int16_t x,int16_t y,char * text,uint16_t color )  {
   } 
  
  //半角文字のスクロール(変数frameに応じてスクロール)
- void scrollMisakiHankaku ( int16_t x,int16_t y,int16_t w,char * text,uint16_t color ){
+ void scrollMisakiHankaku ( int16_t x,int16_t y,int16_t w,char * text,uint16_t color,uint16_t BGColor = BLACK ){
   n=0;
 
   while(*text)
@@ -93,7 +100,6 @@ void drawMisakiHankaku ( int16_t x,int16_t y,char * text,uint16_t color )  {
 
   int16_t loop = frame % (4 * (n + 4));
 
-  matrix.fillRect(x,y,w,7,BLACK);
 
   for (byte i=0; i < 8; i++) {
     for (byte j=0; j < n; j++){
@@ -104,9 +110,31 @@ void drawMisakiHankaku ( int16_t x,int16_t y,char * text,uint16_t color )  {
   }
   }
 
+byte buttonData;
+//ボタンが押されているかどうか確認する
+void updateButton(){
+    digitalWrite(SL,LOW);
+    digitalWrite(SL,HIGH);
+    buttonData = digitalRead(SER);//Hを読む
+    for(byte i=1; i<8; i++){
+      digitalWrite(CLKB, HIGH);
+      buttonData = buttonData << 1 | (digitalRead(SER));//G~Aを読む
+      digitalWrite(CLKB, LOW);
+      }
+  }
+//ボタン番号
+int16_t bNum(int16_t n){
+    return 8 - n;
+  }
+
 void setup() {
-  Serial.begin(9600);
   matrix.begin();//マトリクスの開始
+  //74HC165のピンの設定
+  pinMode(CLKB,OUTPUT);
+  pinMode(SL,OUTPUT);
+  pinMode(SER,INPUT);
+  digitalWrite(SL,HIGH);
+  digitalWrite(CLKB,LOW);
   matrix.setRotation(1);//マトリクスパネルの回転を設定
   matrix.fillScreen(BLACK);//黒で埋める
 }
@@ -115,8 +143,14 @@ void loop() {
   frame = 0;
   while(1){
     frame++;//フレームを1つ増やす
-    scrollMisakiZenkaku(1,1,14,"全角文字のスクロール",MAGENTA);
-    scrollMisakiHankaku(1,17,14,"3.14159265358979",YELLOW);
+    matrix.fillScreen(BLACK);//フレームを黒に塗る
+    updateButton();
+    if(bPressed(0))matrix.fillCircle(7,9,2,RED);
+    if(bPressed(1))matrix.fillCircle(2,14,2,RED);
+    if(bPressed(2))matrix.fillCircle(7,14,2,YELLOW);
+    if(bPressed(3))matrix.fillCircle(12,14,2,RED);
+    if(bPressed(4))matrix.fillCircle(7,19,2,RED);
+    if(bPressed(5))matrix.fillCircle(14,7,1,MAGENTA);
     delay(1000 / FPS);//フレームを変えるまで待つ
   }
 }
