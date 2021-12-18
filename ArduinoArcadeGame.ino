@@ -1,7 +1,8 @@
 #include <RGBmatrixPanel.h>
 #include <misakiUTF16.h>
+#include "pitches.h"
 
-//ピンの諸設定
+//LEDマトリクスのピンの諸設定
 #define CLK  8
 #define OE   9
 #define LAT 10
@@ -23,9 +24,12 @@
 #define WHITE   RGB4(4,4,4)
 
 //74HC165のピンの設定
-#define SL    12//SH/LD
-#define CLKB  11//CLK
-#define SER   13//QH
+#define SL    A3//SH/LD
+#define CLKB  A4//CLK
+#define SER   A5//QH
+
+//パッシブブザーのピン
+#define BUZ 12
 
 //ボタンが点灯しているかどうか
 #define bPressed(i) !bitRead(buttonData,i)
@@ -145,12 +149,30 @@ void loop() {
     frame++;//フレームを1つ増やす
     matrix.fillScreen(BLACK);//フレームを黒に塗る
     updateButton();
-    if(bPressed(0))matrix.fillCircle(7,9,2,RED);
-    if(bPressed(1))matrix.fillCircle(2,14,2,RED);
-    if(bPressed(2))matrix.fillCircle(7,14,2,YELLOW);
-    if(bPressed(3))matrix.fillCircle(12,14,2,RED);
-    if(bPressed(4))matrix.fillCircle(7,19,2,RED);
-    if(bPressed(5))matrix.fillCircle(14,7,1,MAGENTA);
+    if(bPressed(0)){
+      matrix.fillCircle(7,9,2,RED);
+      tone(BUZ,NOTE_C6,1000 / FPS);
+      }
+    if(bPressed(1)){
+      matrix.fillCircle(2,14,2,RED);
+      tone(BUZ,NOTE_D6,1000 / FPS);
+      }
+    if(bPressed(2)){
+      matrix.fillCircle(7,14,2,YELLOW);
+      tone(BUZ,NOTE_E6,1000 / FPS);
+      }
+    if(bPressed(3)){
+      matrix.fillCircle(12,14,2,RED);
+      tone(BUZ,NOTE_F6,1000 / FPS);
+      }
+    if(bPressed(4)){
+      matrix.fillCircle(7,19,2,RED);
+      tone(BUZ,NOTE_G6,1000 / FPS);
+      }
+    if(bPressed(5)){
+      matrix.fillCircle(14,7,1,MAGENTA);
+      tone(BUZ,NOTE_A6,1000 / FPS);
+      }
     delay(1000 / FPS);//フレームを変えるまで待つ
   }
 }
