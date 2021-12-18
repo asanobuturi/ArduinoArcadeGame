@@ -36,7 +36,7 @@
 
 //フレーム
 int16_t frame = 0;
-#define FPS 12
+#define FPS 18
 
 //LEDマトリクスの初期化
 RGBmatrixPanel matrix(A, B, C, CLK, LAT, OE, false);
@@ -77,7 +77,7 @@ void drawMisakiHankaku ( int16_t x,int16_t y,char * text,uint16_t color )  {
  }
  
  //全角文字のスクロール(変数frameに応じてスクロール)
- void scrollMisakiZenkaku ( int16_t x,int16_t y,int16_t w,char * text,uint16_t color,uint16_t BGColor = BLACK ){
+ void scrollMisakiZenkaku ( int16_t x,int16_t y,int16_t w,char * text,uint16_t color ){
   n=0;
 
   while(*text)
@@ -96,7 +96,7 @@ void drawMisakiHankaku ( int16_t x,int16_t y,char * text,uint16_t color )  {
   } 
  
  //半角文字のスクロール(変数frameに応じてスクロール)
- void scrollMisakiHankaku ( int16_t x,int16_t y,int16_t w,char * text,uint16_t color,uint16_t BGColor = BLACK ){
+ void scrollMisakiHankaku ( int16_t x,int16_t y,int16_t w,char * text,uint16_t color ){
   n=0;
 
   while(*text)
@@ -139,6 +139,7 @@ void setup() {
   pinMode(SER,INPUT);
   digitalWrite(SL,HIGH);
   digitalWrite(CLKB,LOW);
+  pinMode(BUZ,OUTPUT);//スピーカーのピン
   matrix.setRotation(1);//マトリクスパネルの回転を設定
   matrix.fillScreen(BLACK);//黒で埋める
 }
@@ -151,27 +152,27 @@ void loop() {
     updateButton();
     if(bPressed(0)){
       matrix.fillCircle(7,9,2,RED);
-      tone(BUZ,NOTE_C6,1000 / FPS);
+      tone(BUZ,NOTE_C6,1200 / FPS);
       }
     if(bPressed(1)){
       matrix.fillCircle(2,14,2,RED);
-      tone(BUZ,NOTE_D6,1000 / FPS);
+      tone(BUZ,NOTE_D6,1200 / FPS);
       }
     if(bPressed(2)){
       matrix.fillCircle(7,14,2,YELLOW);
-      tone(BUZ,NOTE_E6,1000 / FPS);
+      tone(BUZ,NOTE_E6,1200 / FPS);
       }
     if(bPressed(3)){
       matrix.fillCircle(12,14,2,RED);
-      tone(BUZ,NOTE_F6,1000 / FPS);
+      tone(BUZ,NOTE_F6,1200 / FPS);
       }
     if(bPressed(4)){
       matrix.fillCircle(7,19,2,RED);
-      tone(BUZ,NOTE_G6,1000 / FPS);
+      tone(BUZ,NOTE_G6,1200 / FPS);
       }
     if(bPressed(5)){
       matrix.fillCircle(14,7,1,MAGENTA);
-      tone(BUZ,NOTE_A6,1000 / FPS);
+      tone(BUZ,NOTE_A6,1200 / FPS);
       }
     delay(1000 / FPS);//フレームを変えるまで待つ
   }
