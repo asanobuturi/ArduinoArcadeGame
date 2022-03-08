@@ -17,7 +17,7 @@ ArduinoArcadeGame.h
     ボタンが押されているかどうか確認する
 
   RGB4(r,g,b)
-    matrix.color333と同じ
+    matrix.color333と全く同じ
     RGBをそれぞれ0~3(本来は0~7だがまぶしすぎるため)で調整する
 
 matrix.[Adafruit GFX Libraryの関数]
@@ -170,3 +170,44 @@ void initialize(){
   matrix.setRotation(1);//マトリクスパネルの回転を設定
   matrix.fillScreen(BLACK);//黒で埋める
   }
+
+//HSVをRGBに変換
+//一部改造 https://ja.wikipedia.org/wiki/HSV%E8%89%B2%E7%A9%BA%E9%96%93#%E3%82%BD%E3%83%95%E3%83%88%E3%82%A6%E3%82%A7%E3%82%A2%E3%81%A7%E3%81%AE%E5%A4%89%E6%8F%9B%E5%87%A6%E7%90%86_2
+uint16_t hsv(float h, float s, float v){
+  float r = v;
+  float g = v;
+  float b = v;
+  if (s > 0.0f) {
+      h *= 6.0f;
+      int i = (int) h;
+      float f = h - (float) i;
+      switch (i) {
+          default:
+          case 0:
+              g *= 1 - s * (1 - f);
+              b *= 1 - s;
+              break;
+          case 1:
+              r *= 1 - s * f;
+              b *= 1 - s;
+              break;
+          case 2:
+              r *= 1 - s;
+              b *= 1 - s * (1 - f);
+              break;
+          case 3:
+              r *= 1 - s;
+              g *= 1 - s * f;
+              break;
+          case 4:
+              r *= 1 - s * (1 - f);
+              g *= 1 - s;
+              break;
+          case 5:
+              g *= 1 - s;
+              b *= 1 - s * f;
+              break;
+      }
+  }
+  return RGB4(r*4,g*4,b*4);
+}
