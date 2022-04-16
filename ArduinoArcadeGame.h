@@ -9,9 +9,9 @@ ArduinoArcadeGame.h
     全角文字を描く
   void drawMisakiHankaku ( int16_t x,int16_t y,char * text,uint16_t color );
     半角文字を描く
-  void scrollMisakiZenkaku ( int16_t x,int16_t y,int16_t w,char * text,uint16_t color,int16_t frame );
+  void scrollMisakiZenkaku ( int16_t x,int16_t y,int16_t w,char * text,uint16_t color,uint32_t frame );
     全角文字のスクロール
-  void scrollMisakiHankaku ( int16_t x,int16_t y,int16_t w,char * text,uint16_t color,int16_t frame );
+  void scrollMisakiHankaku ( int16_t x,int16_t y,int16_t w,char * text,uint16_t color,uint32_t frame );
     半角文字のスクロール
   bool bPressed(int16_t num)
     ボタンが押されているかどうか確認する
@@ -100,7 +100,7 @@ void drawMisakiHankaku ( int16_t x,int16_t y,char * text,uint16_t color )  {
  }
  
  //全角文字のスクロール
- void scrollMisakiZenkaku ( int16_t x,int16_t y,int16_t w,char * text,uint16_t color,int16_t frame ){
+ void scrollMisakiZenkaku ( int16_t x,int16_t y,int16_t w,char * text,uint16_t color,uint32_t frame ){
   n=0;
 
   while(*text)
@@ -119,7 +119,7 @@ void drawMisakiHankaku ( int16_t x,int16_t y,char * text,uint16_t color )  {
   } 
  
  //半角文字のスクロール
- void scrollMisakiHankaku ( int16_t x,int16_t y,int16_t w,char * text,uint16_t color,int16_t frame ){
+ void scrollMisakiHankaku ( int16_t x,int16_t y,int16_t w,char * text,uint16_t color,uint32_t frame ){
   n=0;
 
   while(*text)
@@ -179,7 +179,7 @@ uint16_t hsv(float h, float s, float v){
   float b = v;
   if (s > 0.0f) {
       h *= 6.0f;
-      int i = (int) h;
+      int16_t i = (int16_t) h;
       float f = h - (float) i;
       switch (i) {
           default:
