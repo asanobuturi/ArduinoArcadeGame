@@ -7,11 +7,11 @@ void setup() {
 
 void loop() {
   frame = 0;
-  while(1){
+  while (1) {
     //matrix.fillScreen(BLACK);//フレームを黒に塗る
-    for(uint16_t i = 0; i < 32; i++){
-      matrix.drawLine(6,i,9,i,hsv(1.0f/32*((i+frame)%32),1.0f,1.0f));
-      }
+    for (uint16_t i = 0; i < 32; i++) {
+      matrix.drawLine(6, i, 9, i, hsv(1.0f / 32 * ((i + frame) % 32), 1.0f, 1.0f));
+    }
     delay(1000 / FPS);//フレームを変えるまで待つ
     frame++;//フレームを1つ増やす
   }
